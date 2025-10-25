@@ -1,0 +1,93 @@
+version: "3.8"
+
+services:
+  # Primary node
+  mongo1:
+    image: mongo:7.0
+    container_name: mongo1
+    command: mongod --replSet rs0 --bind_ip_all --port 27017
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo1_data:/data/db
+    networks:
+      - mongo-cluster
+
+  # Secondary node 1
+  mongo2:
+    image: mongo:7.0
+    container_name: mongo2
+    command: mongod --replSet rs0 --bind_ip_all --port 27017
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo2_data:/data/db
+    networks:
+      - mongo-cluster
+
+    # Secondary node 2
+  mongo3:
+    image: mongo:7.0
+    container_name: mongo3
+    command: mongod --replSet rs0 --bind_ip_all --port 27017
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo3_data:/data/db
+    networks:
+      - mongo-cluster
+
+  # Initialize replica set
+  mongo-init:
+    image: mongo:7.0
+    container_name: mongo-init
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    networks:
+      - mongo-cluster
+    command: >
+      bash -c "
+        echo 'Waiting for MongoDB nodes to start...';
+        sleep 10;
+        mongosh --host mongo1:27017 --eval '
+          rs.initiate({
+            _id: \"rs0\",
+            members: [
+              { _id: 0, host: \"mongo1:27017\", priority: 2 },
+              { _id: 1, host: \"mongo2:27017\", priority: 1 },
+              { _id: 2, host: \"mongo3:27017\", priority: 1 }
+            ]
+          })
+        ';
+        echo 'Replica set initialized!';
+      "
+    restart: "no"
+
+  python-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: python-app
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+    networks:
+      - mongo-cluster
+    volumes:
+      - ./app:/app
+    environment:
+      - MONGO_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+volumes:
+  mongo1_data:
+  mongo2_data:
+  mongo3_data:
+
+networks:
+  mongo-cluster:
+    driver: bridge
