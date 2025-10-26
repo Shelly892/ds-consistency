@@ -340,12 +340,9 @@ class ConsistencyExperiments:
         In MongoDB, we can simulate causal consistency through timestamps and operation order
         """
         print("\n" + "="*70)
-        print(" Experiment 4: Causal Consistency - Bonus Experiment")
+        print(" Experiment 4: Causal Consistency")
         print("="*70)
         
-        print("\n Concept Explanation:")
-        print("Causal consistency: If operation A causally affects operation B, all nodes will observe A and B in the same order")
-        print("Implementation: Use timestamps and operation order to guarantee causal relationships\n")
         
         # Create causal consistency test collection
         causal_collection = self.db.get_collection(

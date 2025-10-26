@@ -2,7 +2,7 @@
 
 A comprehensive analysis of distributed data management using MongoDB replica sets, focusing on replication strategies and consistency models to understand CAP theorem trade-offs.
 
-##  Project Overview
+## Project Overview
 
 This lab demonstrates the fundamental trade-offs in distributed database systems through practical experiments with MongoDB replica sets. The project explores:
 
@@ -11,7 +11,7 @@ This lab demonstrates the fundamental trade-offs in distributed database systems
 - **CAP Theorem**: Practical understanding of Consistency, Availability, and Partition tolerance
 - **Distributed Transactions**: ACID vs. Saga pattern analysis
 
-##  Architecture
+## Architecture
 
 ```
 ┌───────────────────────────────────────────────────────────┐
@@ -25,7 +25,7 @@ This lab demonstrates the fundamental trade-offs in distributed database systems
 └───────────────────────────────────────────────────────────┘
 ```
 
-##  Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -38,8 +38,7 @@ This lab demonstrates the fundamental trade-offs in distributed database systems
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
-   cd ds-lab2
+   git clone https://github.com/Shelly892/ds-consistency.git
    ```
 
 2. **Start the MongoDB cluster**
@@ -53,7 +52,7 @@ This lab demonstrates the fundamental trade-offs in distributed database systems
    docker exec -it python-app python main.py
    ```
 
-##  Project Structure
+## Project Structure
 
 ```
 ds-lab2/
@@ -63,12 +62,13 @@ ds-lab2/
 │   ├── replication.py          # Part B: Replication experiments
 │   ├── consistency.py          # Part C: Consistency model experiments
 │   └── requirements.txt        # Python dependencies
+│   └── Dockerfile              # docker file
 ├── docker-compose.yml          # MongoDB cluster configuration
 ├── LAB_REPORT.md              # Comprehensive analysis report
 └── README.md                  # This file
 ```
 
-##  Experiments
+## Experiments
 
 #### Part A: Basic Setup
 
@@ -88,7 +88,7 @@ ds-lab2/
 - **Performance Comparison**: 50-70% improvement with eventual consistency
 - **Causal Consistency**: Operation ordering and dependencies
 
-##  Key Findings
+## Key Findings
 
 | Configuration | Latency | Data Safety | Use Case                    |
 | ------------- | ------- | ----------- | --------------------------- |
@@ -102,16 +102,14 @@ ds-lab2/
 - Strong consistency: **Complete unavailability** during network partitions
 - Eventual consistency: **Partial functionality** maintained during partitions
 
-
-
-##  Technical Details
+## Technical Details
 
 - **Database**: MongoDB 7.0 with replica set configuration
 - **Containerization**: Docker Compose for multi-node cluster
 - **Language**: Python 3.11 with PyMongo driver
 - **Environment**: Local Docker containers simulating distributed nodes
 
-##  Experiment Menu
+## Experiment Menu
 
 ```
 Experiment menu:
@@ -134,4 +132,3 @@ Experiment menu:
     9. Run all Part B experiments
     10. Run all Part C experiments
 ```
-
